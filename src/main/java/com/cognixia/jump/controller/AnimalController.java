@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,13 @@ public class AnimalController {
 	
 	@Autowired
 	AnimalRepository repo;
+
+	@GetMapping("/")
+	public ResponseEntity<?> index(){
+		return ResponseEntity.status(200)
+				.body("Welcome to the api");
+	}
+	
 	@GetMapping("/animals")
 	public List<Animal> getStudents() {
 		return repo.findAll();
@@ -34,6 +42,13 @@ public class AnimalController {
 		return ResponseEntity.status(200)
 				.body(found.get());
 	}
-	
+	@DeleteMapping("/animal/{id}")
+	public ResponseEntity<?> deleteAnimal(@PathVariable int id) {
+		if(repo.existsById(id)) {
+			repo.deleteById(id);
+			return ResponseEntity.status(200).body("Animal Deleted.");
+		}
+		return ResponseEntity.status(404).body("Animal Not Found.");
+	}
 }
 //vd
